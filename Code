@@ -32,7 +32,7 @@ Private Sub RestoreToolStripMenuItem_Click(sender As System.Object, e As System.
                 .Filter = ("DB Backup File|*.bak;")
                 .FilterIndex = 4
             End With
-            'Clear the file name
+            'Mengosongkan nama file
             OpenFileDialog1.FileName = ""
 
             If OpenFileDialog1.ShowDialog() = DialogResult.OK Then
@@ -46,8 +46,8 @@ Private Sub RestoreToolStripMenuItem_Click(sender As System.Object, e As System.
                 cmd.Connection = con
                 cmd.ExecuteReader()
                 con.Close()
-                Dim st As String = "Sucessfully performed the restore"
-                LogFunc(lblUser.Text, st)
+                'Dim st As String = "Sucessfully performed the restore"
+                'LogFunc(lblUser.Text, st)
                 MessageBox.Show("Successfully performed", "Database Restore", MessageBoxButtons.OK, MessageBoxIcon.Information)
             End If
         Catch ex As Exception
