@@ -1,0 +1,56 @@
+********* BACKUP DATA *********
+********* Contohnya nama databasenya adalah DATAKU ***************
+Sub Backup()
+        Try
+            Dim dt As DateTime = Today
+            Dim destdir As String = "DATAKU " & System.DateTime.Now.ToString("dd-MM-yyyy_h-mm-ss") & ".bak"
+            Dim objdlg As New SaveFileDialog
+            objdlg.FileName = destdir
+            objdlg.Filter = ("DB Backup File|*.bak;")
+            objdlg.FilterIndex = 4
+            objdlg.ShowDialog()
+            Filename = objdlg.FileName
+            Cursor = Cursors.WaitCursor
+            Timer2.Enabled = True
+            con = New SqlConnection(cs)
+            con.Open()
+            Dim cb As String = "backup database DATAKU to disk='" & Filename & "'with init,stats=10"
+            cmd = New SqlCommand(cb)
+            cmd.Connection = con
+            cmd.ExecuteReader()
+            con.Close()
+
+        Catch ex As Exception
+            MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
+        End Try
+    End Sub
+    
+    *********** RESTORE DATA ****************
+Private Sub RestoreToolStripMenuItem_Click(sender As System.Object, e As System.EventArgs) Handles RestoreToolStripMenuItem.Click
+        Try
+            With OpenFileDialog1
+                .Filter = ("DB Backup File|*.bak;")
+                .FilterIndex = 4
+            End With
+            'Clear the file name
+            OpenFileDialog1.FileName = ""
+
+            If OpenFileDialog1.ShowDialog() = DialogResult.OK Then
+                Cursor = Cursors.WaitCursor
+                Timer2.Enabled = True
+                SqlConnection.ClearAllPools()
+                con = New SqlConnection(cs)
+                con.Open()
+                Dim cb As String = "USE Master ALTER DATABASE DATAKU SET Single_User WITH Rollback Immediate Restore database DATAKU FROM disk='" & OpenFileDialog1.FileName & "' WITH REPLACE ALTER DATABASE DATAKU SET Multi_User "
+                cmd = New SqlCommand(cb)
+                cmd.Connection = con
+                cmd.ExecuteReader()
+                con.Close()
+                Dim st As String = "Sucessfully performed the restore"
+                LogFunc(lblUser.Text, st)
+                MessageBox.Show("Successfully performed", "Database Restore", MessageBoxButtons.OK, MessageBoxIcon.Information)
+            End If
+        Catch ex As Exception
+            MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
+        End Try
+    End Sub
