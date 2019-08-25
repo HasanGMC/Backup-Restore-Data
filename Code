@@ -46,8 +46,6 @@ Private Sub RestoreToolStripMenuItem_Click(sender As System.Object, e As System.
                 cmd.Connection = con
                 cmd.ExecuteReader()
                 con.Close()
-                'Dim st As String = "Sucessfully performed the restore"
-                'LogFunc(lblUser.Text, st)
                 MessageBox.Show("Successfully performed", "Database Restore", MessageBoxButtons.OK, MessageBoxIcon.Information)
             End If
         Catch ex As Exception
